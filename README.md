@@ -5,8 +5,6 @@ This version supports **manual admin-based activation**, **trial system**, and b
 
 ---
 
-## Test Changes By Benzo Cv
-
 🛠️ Tech Stack
 
 - **Frontend:** React + Tailwind + Vite (PWA enabled)
