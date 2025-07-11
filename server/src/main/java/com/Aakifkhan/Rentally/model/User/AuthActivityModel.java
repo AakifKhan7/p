@@ -28,9 +28,18 @@ public class AuthActivityModel {
     @Column(nullable = false)
     private Timestamp loginAt;
 
+    @Column()
     private Timestamp logoutAt;
 
     @Column(nullable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private UserModel createdBy;
+
+    @Column()
+    @ManyToOne
+    @JoinColumn(name = "updated_by", nullable = false)
+    private UserModel updatedBy;
     private Timestamp createdAt;
 
     @Column(nullable = false)
