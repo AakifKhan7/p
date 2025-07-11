@@ -14,7 +14,6 @@ This version supports **manual admin-based activation**, **trial system**, and b
 - **Storage:** Cloudinary / Firebase Storage for PDF reports
 
 ---
-<<<<<<< Updated upstream
 
 ## ✅ Core Features
 
@@ -31,8 +30,7 @@ This version supports **manual admin-based activation**, **trial system**, and b
 
 ---
 =======
-HELLO
->>>>>>> Stashed changes
+
 
 ## 🔗 Frontend Pages (Routes)
 
