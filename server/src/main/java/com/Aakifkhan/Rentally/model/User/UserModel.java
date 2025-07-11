@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,14 +42,12 @@ public class UserModel {
     private Timestamp updatedAt;
 
 
-    @Column(nullable = false)
-    @ManyToOne
-    @JoinColumn(name = "created_by", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = true)
     private UserModel createdBy;
 
-    @Column()
-    @ManyToOne
-    @JoinColumn(name = "updated_by", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by", nullable = true)
     private UserModel updatedBy;
 
     @Column(nullable = false)

@@ -18,7 +18,7 @@ public class AuthActivityModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_auth_id", nullable = false)
     private UserAuthModel userAuth;
 
@@ -31,15 +31,15 @@ public class AuthActivityModel {
     @Column()
     private Timestamp logoutAt;
 
-    @Column(nullable = false, updatable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     private UserModel createdBy;
 
-    @Column()
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updated_by", nullable = false)
     private UserModel updatedBy;
+
+    @Column(nullable = false, updatable = false)
     private Timestamp createdAt;
 
     @Column(nullable = false)

@@ -3,6 +3,9 @@ package com.Aakifkhan.Rentally.model.Shop;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -35,7 +38,8 @@ public class Shop {
     @Column(nullable = false)
     private String shopPhone;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserModel user;
 
     @Column(nullable = false, updatable = false)
@@ -44,10 +48,12 @@ public class Shop {
     @Column(nullable = false)
     private Timestamp updatedAt;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
     private UserModel createdBy;
 
-    @Column()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by", nullable = false)
     private UserModel updatedBy;
 
     @Column()
