@@ -1,4 +1,4 @@
-# 📦 Dukandar Digital Hisab App (Voice-based Sale Logger)
+# 📦 Dukandar Digital Hisab App (Voice-based Sale Logger) dfdf dfdf dfdg
 
 A Progressive Web App (PWA) for local shopkeepers to replace handwritten notebooks with a smart voice-entry system.
 This version supports **manual admin-based activation**, **trial system**, and basic sale tracking/reporting features.
