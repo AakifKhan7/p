@@ -15,20 +15,6 @@ This version supports **manual admin-based activation**, **trial system**, and b
 
 ---
 
-## ✅ Core Features
-
-| Feature                      | Description                                       |
-| ---------------------------- | ------------------------------------------------- |
-| 🔐 Phone-based Login         | OTP-based simple login system                     |
-| 🎙️ Voice Sale Entry        | Speak item & amount → auto-log sale              |
-| 📊 Daily Dashboard           | Summary of today's sale, chart/graph              |
-| 🧾 PDF Report Generator      | Download or send weekly/monthly report            |
-| 🧮 Sales History             | Full list of past entries with filter             |
-| 🕒 Trial Countdown           | 7-day free usage, then manual activation required |
-| 💰 UPI-based Payment         | Manual payment via UPI                            |
-| 👑 Admin Panel (Manual Only) | Manually activate/deactivate user from backend    |
-
----
 
 ## 🔗 Frontend Pages (Routes)
 
