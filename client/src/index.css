@@ -25,7 +25,7 @@ html, body {
 }
 
 /* Custom utility classes */
-.bg-gradient-helpinix {
+.bg-gradient {
   background: linear-gradient(to bottom right, #3e4a6d, #7b8bd7, #dfe0ed);
 }
 
