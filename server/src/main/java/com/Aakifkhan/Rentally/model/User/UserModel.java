@@ -51,9 +51,6 @@ public class UserModel {
     private UserModel updatedBy;
 
     @Column(nullable = false)
-    private boolean isActive = true;
-
-    @Column(nullable = false)
     private boolean isDeleted = false;
 
     @PrePersist

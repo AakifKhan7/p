@@ -61,6 +61,13 @@ This version supports **manual admin-based activation**, **trial system**, and b
 - `GET  /api/sales/list` → List all sales
 - `DELETE /api/sales/:id/delete` → (Optional) Delete sale
 
+### 🏪 Shop
+- `POST /api/shop/create` → Add a new shop (Boss only)
+- `PUT /api/shop/:id/update` → Update shop details
+- `DELETE /api/shop/:id/delete` → Delete shop (soft delete)
+- `GET /api/shop/list` → Get all shops for boss user
+- `GET /api/shop/:id` → Get specific shop details
+
 ### 📄 Reports
 - `POST /api/report/generate` → Create PDF for selected dates
 - `POST /api/report/send` → Send report to WhatsApp or download link

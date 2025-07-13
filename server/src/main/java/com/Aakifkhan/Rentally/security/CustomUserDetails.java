@@ -53,7 +53,7 @@ public class CustomUserDetails implements UserDetails {
         return !userAuth.isDeleted();
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userAuth.getUser().getId();
     }
 }

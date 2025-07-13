@@ -41,9 +41,8 @@ public class SalesMode {
     @Column(nullable = true)
     private String image;
 
-    @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shop_id", referencedColumnName = "id")
+    @JoinColumn(name = "shop_id", referencedColumnName = "id", nullable = false)
     private Shop shop;
 
     @Column(nullable = false, updatable = false)
