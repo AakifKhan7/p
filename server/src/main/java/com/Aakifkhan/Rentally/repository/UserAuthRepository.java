@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.Aakifkhan.Rentally.model.User.UserAuthModel;
 
 @Repository
-public interface UserAuthRepository extends JpaRepository<UserAuthModel, Integer> {
+public interface UserAuthRepository extends JpaRepository<UserAuthModel, Long> {
     Optional<UserAuthModel> findByEmail(String email);
 }

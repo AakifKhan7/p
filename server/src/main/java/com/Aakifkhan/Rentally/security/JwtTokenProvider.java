@@ -35,6 +35,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .subject(userPrincipal.getUsername())
+                .claim("uid", userPrincipal.getUserId())
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)
@@ -49,6 +50,19 @@ public class JwtTokenProvider {
                 .getPayload();
 
         return claims.getSubject();
+    }
+
+    public Long getUserIdFromJWT(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        Object uidObj = claims.get("uid");
+        if (uidObj == null) return null;
+        if (uidObj instanceof Integer i) return i.longValue();
+        if (uidObj instanceof Long l) return l;
+        return Long.valueOf(uidObj.toString());
     }
 
     public boolean validateToken(String authToken) {

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.Aakifkhan.Rentally.model.User.UserModel;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserModel, Integer> {
+public interface UserRepository extends JpaRepository<UserModel, Long> {
     Optional<UserModel> findByPhoneNumber(String phoneNumber);
 }

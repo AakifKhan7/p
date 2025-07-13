@@ -27,7 +27,7 @@ public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -49,9 +49,6 @@ public class UserModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updated_by", nullable = true)
     private UserModel updatedBy;
-
-    @Column(nullable = false)
-    private boolean isActive = true;
 
     @Column(nullable = false)
     private boolean isDeleted = false;

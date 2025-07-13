@@ -8,7 +8,7 @@ This version supports **manual admin-based activation**, **trial system**, and b
 ## 🛠️ Tech Stack
 
 - **Frontend:** React + Tailwind + Vite (PWA enabled)
-- **Backend:** Node.js + Express (or Firebase Functions / Supabase Edge Functions)
+- **Backend:** Java spring boot (or Firebase Functions / Supabase Edge Functions)
 - **Database:** Supabase / Firebase Firestore
 - **Authentication:** Phone OTP (Firebase Auth or Supabase Auth)
 - **Storage:** Cloudinary / Firebase Storage for PDF reports
@@ -60,6 +60,13 @@ This version supports **manual admin-based activation**, **trial system**, and b
 - `POST /api/sales/create` → Create sale entry
 - `GET  /api/sales/list` → List all sales
 - `DELETE /api/sales/:id/delete` → (Optional) Delete sale
+
+### 🏪 Shop
+- `POST /api/shop/create` → Add a new shop (Boss only)
+- `PUT /api/shop/:id/update` → Update shop details
+- `DELETE /api/shop/:id/delete` → Delete shop (soft delete)
+- `GET /api/shop/list` → Get all shops for boss user
+- `GET /api/shop/:id` → Get specific shop details
 
 ### 📄 Reports
 - `POST /api/report/generate` → Create PDF for selected dates
