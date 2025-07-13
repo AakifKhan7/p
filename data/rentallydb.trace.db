@@ -116,3 +116,6 @@ SELECT * FROM USER_AUTH ua inner join users u on ua.user_id = i.id [42122-232]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Unknown Source)
+2025-07-13 19:26:11.267128+05:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * from [*]user"; expected "identifier"; SQL statement:
+select * from user [42001-232]
