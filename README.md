@@ -8,7 +8,7 @@ This version supports **manual admin-based activation**, **trial system**, and b
 ## 🛠️ Tech Stack
 
 - **Frontend:** React + Tailwind + Vite (PWA enabled)
-- **Backend:** Node.js + Express (or Firebase Functions / Supabase Edge Functions)
+- **Backend:** Java spring boot (or Firebase Functions / Supabase Edge Functions)
 - **Database:** Supabase / Firebase Firestore
 - **Authentication:** Phone OTP (Firebase Auth or Supabase Auth)
 - **Storage:** Cloudinary / Firebase Storage for PDF reports

@@ -1,13 +1,16 @@
-package com.Aakifkhan.Rentally.model.Shop;
+package com.Aakifkhan.Rentally.model.Sales;
 
 import jakarta.persistence.Column;
+import java.sql.Timestamp;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import com.Aakifkhan.Rentally.model.Shop.Shop;
+import com.Aakifkhan.Rentally.model.User.UserModel;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -15,32 +18,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-
-import com.Aakifkhan.Rentally.model.User.UserModel;
-
 @Entity
-@Table(name = "Shop")
+@Table(name = "sales")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Shop {
+public class SalesMode {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String shopName;
+    private String name;
+
+    @Column(nullable = true)
+    private String description;
 
     @Column(nullable = false)
-    private String shopAddress;
+    private double price;
+
+    @Column(nullable = true)
+    private String image;
 
     @Column(nullable = false)
-    private String shopPhone;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserModel user;
+    @JoinColumn(name = "shop_id", referencedColumnName = "id")
+    private Shop shop;
 
     @Column(nullable = false, updatable = false)
     private Timestamp createdAt;
@@ -49,14 +53,14 @@ public class Shop {
     private Timestamp updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "created_by", referencedColumnName = "id", nullable = true)
     private UserModel createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updated_by", referencedColumnName = "id", nullable = false)
     private UserModel updatedBy;
 
-    @Column()
+    @Column(nullable = false)
     private boolean isDeleted = false;
 
     @PrePersist

@@ -27,7 +27,7 @@ public class UserAuthModel {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -36,7 +36,7 @@ public class UserAuthModel {
     private String password;      
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserModel user;
 
     @Column(nullable = false, updatable = false)
@@ -46,11 +46,12 @@ public class UserAuthModel {
     private Timestamp updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
+    @JoinColumn(name = "created_by", referencedColumnName = "id", nullable = true)
     private UserModel createdBy;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "updated_by", nullable = false)
+    @JoinColumn(name = "updated_by", referencedColumnName = "id", nullable = false)
     private UserModel updatedBy;
 
     @Column(nullable = false)
