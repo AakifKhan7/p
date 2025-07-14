@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
-const InputField = ({ label, type = "text", icon: Icon, placeholder }) => {
+const InputField = ({ label, type = "text", icon: Icon, placeholder, value, onChange, name }) => {
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
   const currentType = isPassword && show ? "text" : type;
@@ -14,8 +14,11 @@ const InputField = ({ label, type = "text", icon: Icon, placeholder }) => {
           <Icon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
         )}
         <input
+          name={name}
           type={currentType}
           placeholder={placeholder}
+          value={value}
+          onChange={onChange}
           className="w-full border border-gray-300 rounded-md py-2 pl-10 pr-10 text-sm focus:outline-none focus:border-yellow-500"
         />
         {isPassword && (
