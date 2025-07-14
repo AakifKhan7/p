@@ -1,15 +1,22 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import SignupPage from './pages/SignupPage';
+import HomePage from './pages/HomePage';
+import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route element={<ProtectedRoute />}> 
+          {/* Add your protected routes here */}
+          <Route path="/dashboard" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
       </Routes>
     </Router>
   );
