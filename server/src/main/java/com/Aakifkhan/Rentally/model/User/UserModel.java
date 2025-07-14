@@ -41,6 +41,15 @@ public class UserModel {
     @Column(nullable = false)
     private Timestamp updatedAt;
 
+    // Social links
+    @Column(length = 30)
+    private String whatsappNumber;
+
+    @Column(length = 100)
+    private String instagramHandle;
+
+    @Column(length = 255)
+    private String websiteUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = true)
