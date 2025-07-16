@@ -4,6 +4,7 @@ import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
+import SalesPage from './pages/SalesPage';
 import LoginPage from './pages/LoginPage';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           {/* Add your protected routes here */}
           <Route path="/dashboard" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/sales" element={<SalesPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
