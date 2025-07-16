@@ -16,6 +16,9 @@ const NavBar = () => {
         <Link to="/profile" className="hover:text-yellow-600">
           Profile
         </Link>
+        <Link to="/sales" className="hover:text-yellow-600">
+          Sales
+        </Link>
       </div>
       <button
         onClick={handleLogout}
