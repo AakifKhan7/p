@@ -20,6 +20,9 @@ public class SalesCreateRequest {
     @Positive
     private Integer quantity;
 
+    @NotNull
+    private Long productId;
+
     private String description;
 
     @NotNull

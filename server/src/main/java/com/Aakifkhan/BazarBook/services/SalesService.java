@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.Aakifkhan.BazarBook.dto.sales.SalesCreateRequest;
 import com.Aakifkhan.BazarBook.dto.sales.SalesResponse;
 import com.Aakifkhan.BazarBook.model.Sales.SalesModel;
-import com.Aakifkhan.BazarBook.model.Shop.Shop;
+import com.Aakifkhan.BazarBook.model.Shop.ShopModel;
+import com.Aakifkhan.BazarBook.model.Inventory.ProductModel;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import com.Aakifkhan.BazarBook.model.User.UserModel;
 import com.Aakifkhan.BazarBook.repository.SalesRepository;
 import com.Aakifkhan.BazarBook.repository.ShopRepository;
@@ -32,24 +35,29 @@ public class SalesService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Transactional
     public SalesResponse createSale(SalesCreateRequest request) {
         UserModel currentUser = currentUserService.getCurrentUser();
 
         // Validate shop exists and belongs to current user
-        Shop shop = shopRepository.findByIdAndIsDeletedFalse(request.getShopId())
+        ShopModel shop = shopRepository.findByIdAndIsDeletedFalse(request.getShopId())
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
         if (!shop.getUser().getId().equals(currentUser.getId())) {
             throw new RuntimeException("Unauthorized: Shop does not belong to user");
         }
 
+        ProductModel product = entityManager.find(ProductModel.class, request.getProductId());
+        if (product == null || product.isDeleted()) {
+            throw new RuntimeException("Product not found");
+        }
+
         SalesModel sale = new SalesModel();
-        sale.setName(request.getName());
-        sale.setCategory(request.getCategory());
+        sale.setProduct(product);
         sale.setQuantity(request.getQuantity());
-        sale.setDescription(request.getDescription());
         sale.setPrice(request.getPrice());
-        sale.setImage(request.getImage());
         sale.setShop(shop);
         sale.setCreatedBy(currentUser);
         sale.setUpdatedBy(currentUser);
@@ -64,6 +72,11 @@ public class SalesService {
                 .stream()
                 .map(s -> {
                     SalesResponse resp = modelMapper.map(s, SalesResponse.class);
+                    // Map nested product details manually
+                    resp.setName(s.getProduct().getName());
+                    resp.setCategory(s.getProduct().getCategory());
+                    resp.setDescription(s.getProduct().getDescription());
+                    resp.setImage(s.getProduct().getImage());
                     resp.setShopId(s.getShop().getId());
                     return resp;
                 })
