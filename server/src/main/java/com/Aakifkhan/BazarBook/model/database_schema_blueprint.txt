@@ -1,0 +1,124 @@
+Blueprint of BazarBook Database Schema (generated 2025-07-17 19:58 IST)
+===================================================================
+
+NOTE: Column names follow Java field names (camelCase). In your RDBMS you may map them to snake_case if preferred.
+
+-------------------------------------------------------------------
+1. users (entity: UserModel)
+-------------------------------------------------------------------
+Primary Key
+  • id                BIGINT, auto-increment
+Columns
+  • name              VARCHAR,     NOT NULL
+  • phoneNumber       VARCHAR(15), NOT NULL, UNIQUE
+  • whatsappNumber    VARCHAR(30)
+  • instagramHandle   VARCHAR(100)
+  • websiteUrl        VARCHAR(255)
+  • createdAt         TIMESTAMP,   NOT NULL, default current timestamp
+  • updatedAt         TIMESTAMP,   NOT NULL
+  • isDeleted         BOOLEAN,     NOT NULL, default FALSE
+Audit Foreign Keys
+  • created_by        BIGINT  → users.id (nullable)
+  • updated_by        BIGINT  → users.id (nullable)
+Relations
+  • self-referencing many-to-one on created_by / updated_by
+
+-------------------------------------------------------------------
+2. Shop (entity: Shop)
+-------------------------------------------------------------------
+Primary Key
+  • id             BIGINT, auto-increment
+Columns
+  • shopName       VARCHAR,  NOT NULL
+  • shopAddress    VARCHAR,  NOT NULL
+  • shopPhone      VARCHAR,  NOT NULL
+  • createdAt      TIMESTAMP NOT NULL, default current timestamp
+  • updatedAt      TIMESTAMP NOT NULL
+  • isDeleted      BOOLEAN   NOT NULL, default FALSE
+Foreign Keys
+  • user_id        BIGINT → users.id (owner)              NOT NULL
+  • created_by     BIGINT → users.id (audit)              NOT NULL
+  • updated_by     BIGINT → users.id (audit)              NOT NULL
+Relations
+  • Many Shop : 1 User (owner)
+
+-------------------------------------------------------------------
+3. sales (entity: SalesModel)
+-------------------------------------------------------------------
+Primary Key
+  • id             BIGINT, auto-increment
+Columns
+  • name           VARCHAR,  NOT NULL
+  • category       VARCHAR,  NOT NULL
+  • quantity       INTEGER,  NOT NULL
+  • description    VARCHAR,  NULLABLE
+  • price          DOUBLE,   NOT NULL
+  • image          VARCHAR,  NULLABLE
+  • createdAt      TIMESTAMP NOT NULL, default current timestamp
+  • updatedAt      TIMESTAMP NOT NULL
+  • isDeleted      BOOLEAN   NOT NULL, default FALSE
+Foreign Keys
+  • shop_id        BIGINT → Shop.id                       NOT NULL
+  • created_by     BIGINT → users.id (audit)              NULLABLE
+  • updated_by     BIGINT → users.id (audit)              NOT NULL
+Relations
+  • Many Sales : 1 Shop
+
+-------------------------------------------------------------------
+4. UserAuth (entity: UserAuthModel)
+-------------------------------------------------------------------
+Primary Key
+  • id             BIGINT, auto-increment
+Columns
+  • email          VARCHAR,  NOT NULL, UNIQUE
+  • password       VARCHAR,  NOT NULL
+  • createdAt      TIMESTAMP NOT NULL, default current timestamp
+  • updatedAt      TIMESTAMP NOT NULL
+  • isDeleted      BOOLEAN   NOT NULL, default FALSE
+Foreign Keys
+  • user_id        BIGINT → users.id (1-to-1)             NOT NULL
+  • created_by     BIGINT → users.id (audit)              NULLABLE
+  • updated_by     BIGINT → users.id (audit)              NOT NULL
+Relations
+  • 1 UserAuth : 1 User
+
+-------------------------------------------------------------------
+5. AuthActivity (entity: AuthActivityModel)
+-------------------------------------------------------------------
+Primary Key
+  • id             INTEGER, auto-increment
+Columns
+  • ipAddress      VARCHAR,  NOT NULL
+  • loginAt        TIMESTAMP NOT NULL (defaults on create)
+  • logoutAt       TIMESTAMP NULLABLE
+  • createdAt      TIMESTAMP NOT NULL, default current timestamp
+  • updatedAt      TIMESTAMP NOT NULL
+  • isDeleted      BOOLEAN   NOT NULL, default FALSE
+Foreign Keys
+  • user_auth_id   BIGINT  → UserAuth.id                  NOT NULL
+  • created_by     BIGINT  → users.id (audit)             NOT NULL
+  • updated_by     BIGINT  → users.id (audit)             NOT NULL
+Relations
+  • Many AuthActivity : 1 UserAuth
+
+-------------------------------------------------------------------
+6. UserRoll (entity: UserRollModel)
+-------------------------------------------------------------------
+Primary Key
+  • id             BIGINT, auto-increment
+Columns
+  • Roll           VARCHAR,  NOT NULL
+  • isActive       BOOLEAN,  NOT NULL, default TRUE
+  • isDeleted      BOOLEAN,  NOT NULL, default FALSE
+  • createdAt      TIMESTAMP NOT NULL, default current timestamp
+  • updatedAt      TIMESTAMP NOT NULL
+Foreign Keys
+  • created_by     BIGINT → users.id (audit)              NOT NULL
+  • updated_by     BIGINT → users.id (audit)              NOT NULL
+Relations
+  • Many UserRoll : 1 User (via audit columns)
+
+-------------------------------------------------------------------
+7. Inventory (entity: InventoryModel)
+-------------------------------------------------------------------
+NOTE: The Java file exists but is empty. Define fields to generate schema.

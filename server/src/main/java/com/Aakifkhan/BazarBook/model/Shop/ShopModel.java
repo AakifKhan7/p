@@ -1,18 +1,13 @@
-package com.Aakifkhan.BazarBook.model.Sales;
+package com.Aakifkhan.BazarBook.model.Shop;
 
 import jakarta.persistence.Column;
-import java.sql.Timestamp;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
-import com.Aakifkhan.BazarBook.model.Inventory.ProductModel;
-import com.Aakifkhan.BazarBook.model.Shop.ShopModel;
-import com.Aakifkhan.BazarBook.model.User.UserModel;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -20,30 +15,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
+import com.Aakifkhan.BazarBook.model.User.UserModel;
+
 @Entity
-@Table(name = "sales")
+@Table(name = "Shop")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SalesModel {
-    
+public class ShopModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id")
-    private ProductModel product;
+    @Column(nullable = false)
+    private String shopName;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private String shopAddress;
 
     @Column(nullable = false)
-    private Double price;
+    private String shopPhone;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shop_id", referencedColumnName = "id", nullable = false)
-    private ShopModel shop;
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private UserModel user;
 
     @Column(nullable = false, updatable = false)
     private Timestamp createdAt;
@@ -52,14 +49,14 @@ public class SalesModel {
     private Timestamp updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "created_by", referencedColumnName = "id", nullable = false)
     private UserModel createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updated_by", referencedColumnName = "id", nullable = false)
     private UserModel updatedBy;
 
-    @Column(nullable = false)
+    @Column()
     private boolean isDeleted = false;
 
     @PrePersist
