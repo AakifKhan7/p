@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.Aakifkhan.BazarBook.dto.shop.ShopCreateRequest;
 import com.Aakifkhan.BazarBook.dto.shop.ShopResponse;
 import com.Aakifkhan.BazarBook.dto.shop.ShopUpdateRequest;
-import com.Aakifkhan.BazarBook.model.Shop.Shop;
+import com.Aakifkhan.BazarBook.model.Shop.ShopModel;
 import com.Aakifkhan.BazarBook.model.User.UserModel;
 import com.Aakifkhan.BazarBook.repository.ShopRepository;
 
 import org.modelmapper.ModelMapper;
-import com.Aakifkhan.BazarBook.services.CurrentUserService;
 
 @Service
 public class ShopService {
@@ -37,7 +36,7 @@ public class ShopService {
         UserModel currentUser = currentUserService.getCurrentUser();
         // Here we can verify if current user has Head role, skipped for brevity.
 
-        Shop shop = new Shop();
+        ShopModel shop = new ShopModel();
         shop.setShopName(request.getShopName());
         shop.setShopAddress(request.getShopAddress());
         shop.setShopPhone(request.getShopPhone());
@@ -45,14 +44,14 @@ public class ShopService {
         shop.setCreatedBy(currentUser);
         shop.setUpdatedBy(currentUser);
 
-        Shop saved = shopRepository.save(shop);
+        ShopModel saved = shopRepository.save(shop);
         return modelMapper.map(saved, ShopResponse.class);
     }
 
     @Transactional
     public ShopResponse updateShop(Long id, ShopUpdateRequest request) {
         UserModel currentUser = currentUserService.getCurrentUser();
-        Shop shop = shopRepository.findByIdAndIsDeletedFalse(id)
+        ShopModel shop = shopRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
         // Optional: ensure currentUser is owner/Head
         if (!shop.getUser().getId().equals(currentUser.getId())) {
@@ -64,14 +63,14 @@ public class ShopService {
         shop.setShopPhone(request.getShopPhone());
         shop.setUpdatedBy(currentUser);
 
-        Shop updated = shopRepository.save(shop);
+        ShopModel updated = shopRepository.save(shop);
         return modelMapper.map(updated, ShopResponse.class);
     }
 
     @Transactional
     public void deleteShop(Long id) {
         UserModel currentUser = currentUserService.getCurrentUser();
-        Shop shop = shopRepository.findByIdAndIsDeletedFalse(id)
+        ShopModel shop = shopRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
         if (!shop.getUser().getId().equals(currentUser.getId())) {
             throw new RuntimeException("Unauthorized");
@@ -91,7 +90,7 @@ public class ShopService {
 
     public ShopResponse getShop(Long id) {
         UserModel currentUser = currentUserService.getCurrentUser();
-        Shop shop = shopRepository.findByIdAndIsDeletedFalse(id)
+        ShopModel shop = shopRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
         if (!shop.getUser().getId().equals(currentUser.getId())) {
             throw new RuntimeException("Unauthorized");
