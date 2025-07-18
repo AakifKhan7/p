@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
 import SalesPage from './pages/SalesPage';
 import LoginPage from './pages/LoginPage';
+import InventoryPage from './pages/InventoryPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/dashboard" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/sales" element={<SalesPage />} />
+          <Route path="/inventory" element={<InventoryPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
