@@ -57,6 +57,7 @@ public class InventoryService {
                 .orElseGet(() -> {
                     ProductModel newProduct = new ProductModel();
                     newProduct.setProductName(request.getProductName());
+                    newProduct.setCategory(request.getCategory());
                     newProduct.setCreatedBy(currentUser);
                     newProduct.setUpdatedBy(currentUser);
                     return productRepository.save(newProduct);

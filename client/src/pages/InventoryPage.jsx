@@ -9,6 +9,7 @@ let initialInventoryLoaded = false;
 
 const emptyForm = {
     productName: "",
+    category: "",
     quantity: "",
     price: "",
     shopId: "",
@@ -152,6 +153,13 @@ export default function InventoryPage() {
                         value={form.productName}
                         onChange={handleChange}
                         placeholder="Enter product name"
+                    />
+                    <InputField
+                        label="Category"
+                        name="category"
+                        value={form.category}
+                        onChange={handleChange}
+                        placeholder="Enter category"
                     />
                     <InputField
                         label="Quantity"
