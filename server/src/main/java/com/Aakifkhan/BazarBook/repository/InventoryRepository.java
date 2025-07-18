@@ -16,4 +16,5 @@ public interface InventoryRepository extends JpaRepository<InventoryModel, Long>
     
     boolean existsByShopAndProductAndIsDeletedFalse(ShopModel shop, ProductModel product);
     
+    InventoryModel findByShopAndProductAndIsDeletedFalse(ShopModel shop, ProductModel product);
 }

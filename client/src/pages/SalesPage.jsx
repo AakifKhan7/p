@@ -8,12 +8,9 @@ import NavBar from "../components/NavBar";
 import { apiFetch } from "../utils/api";
 
 const emptyForm = {
-  name: "",
-  description: "",
-  category: "",
+  productName: "",
   quantity: "",
   price: "",
-  image: "",
   shopId: "",
 };
 
@@ -46,7 +43,7 @@ export default function SalesPage() {
     }
   };
 
-    const didInit = useRef(false);
+  const didInit = useRef(false);
   useEffect(() => {
     if (didInit.current) return; // avoid double call in React StrictMode (dev)
     didInit.current = true;
@@ -78,7 +75,7 @@ export default function SalesPage() {
     }
     try {
       setLoading(true);
-      await apiFetch("/api/sales/create", {
+      await apiFetch("/api/sales", {
         method: "POST",
         body: JSON.stringify({
           ...form,
@@ -150,17 +147,11 @@ export default function SalesPage() {
           )}
 
           <InputField
-            label="Name"
-            name="name"
-            value={form.name}
+            label="Product Name"
+            name="productName"
+            value={form.productName}
             onChange={handleChange}
-            placeholder="Product name"
-          />
-          <InputField
-            label="Category"
-            name="category"
-            value={form.category}
-            onChange={handleChange}
+            placeholder="Enter product name"
           />
           <InputField
             label="Quantity"
@@ -168,13 +159,7 @@ export default function SalesPage() {
             type="number"
             value={form.quantity}
             onChange={handleChange}
-          />
-          <InputField
-            label="Description"
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            placeholder="Optional description"
+            min="1"
           />
           <InputField
             label="Price"
@@ -183,13 +168,7 @@ export default function SalesPage() {
             onChange={handleChange}
             placeholder="0.00"
             type="number"
-          />
-          <InputField
-            label="Image URL"
-            name="image"
-            value={form.image}
-            onChange={handleChange}
-            placeholder="https://example.com/img.jpg"
+            min="0"
           />
 
           <button
@@ -204,7 +183,7 @@ export default function SalesPage() {
         {/* Sales List */}
         <div className="bg-white border border-yellow-200 rounded-xl p-8 shadow-lg flex flex-col gap-6">
           <h2 className="flex items-center gap-2 font-semibold text-yellow-600 text-lg">
-            <ShoppingCart size={20} /> My Sales
+            <ShoppingCart size={20} /> Recent Sales
           </h2>
 
           {sales.length === 0 ? (
@@ -219,13 +198,14 @@ export default function SalesPage() {
                   {sale.image && (
                     <img
                       src={sale.image}
-                      alt={sale.name}
+                      alt={sale.productName}
                       className="w-full h-40 object-cover rounded-md"
                     />
                   )}
-                  <h3 className="font-medium text-gray-800">{sale.name}</h3>
-                  <p className="text-sm text-gray-600 line-clamp-3">{sale.description}</p>
-                  <span className="text-yellow-600 font-semibold mt-auto">₹{sale.price}</span>
+                  <h3 className="font-medium text-gray-800">{sale.productName}</h3>
+                  <p className="text-sm text-gray-600">Quantity: {sale.quantity}</p>
+                  <p className="text-sm text-gray-600">Price: ₹{sale.price}</p>
+                  <p className="text-sm text-gray-600">Shop: {sale.shop.name}</p>
 
                   <button
                     type="button"

@@ -12,11 +12,14 @@ import com.Aakifkhan.BazarBook.dto.sales.SalesResponse;
 import com.Aakifkhan.BazarBook.model.Sales.SalesModel;
 import com.Aakifkhan.BazarBook.model.Shop.ShopModel;
 import com.Aakifkhan.BazarBook.model.Inventory.ProductModel;
+import com.Aakifkhan.BazarBook.model.Inventory.InventoryModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import com.Aakifkhan.BazarBook.model.User.UserModel;
 import com.Aakifkhan.BazarBook.repository.SalesRepository;
 import com.Aakifkhan.BazarBook.repository.ShopRepository;
+import com.Aakifkhan.BazarBook.repository.InventoryRepository;
+import com.Aakifkhan.BazarBook.repository.ProductRespository;
 
 import org.modelmapper.ModelMapper;
 
@@ -35,9 +38,20 @@ public class SalesService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ProductRespository productRepository;
+
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Create a new sale record and update inventory
+     * @param request Sales creation request
+     * @return Created sale details
+     */
     @Transactional
     public SalesResponse createSale(SalesCreateRequest request) {
         UserModel currentUser = currentUserService.getCurrentUser();
@@ -49,11 +63,21 @@ public class SalesService {
             throw new RuntimeException("Unauthorized: Shop does not belong to user");
         }
 
-        ProductModel product = entityManager.find(ProductModel.class, request.getProductId());
-        if (product == null || product.isDeleted()) {
-            throw new RuntimeException("Product not found");
+        // Get product by name (case-insensitive)
+        ProductModel product = productRepository.findByProductNameIgnoreCaseAndIsDeletedFalse(request.getProductName())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Check inventory
+        InventoryModel inventory = inventoryRepository.findByShopAndProductAndIsDeletedFalse(shop, product);
+        if (inventory == null) {
+            throw new RuntimeException("Product not available in this shop");
         }
 
+        if (inventory.getQuantity() < request.getQuantity()) {
+            throw new RuntimeException("Insufficient stock available");
+        }
+
+        // Create sale record
         SalesModel sale = new SalesModel();
         sale.setProduct(product);
         sale.setQuantity(request.getQuantity());
@@ -63,6 +87,12 @@ public class SalesService {
         sale.setUpdatedBy(currentUser);
 
         SalesModel saved = salesRepository.save(sale);
+
+        // Update inventory
+        inventory.setQuantity(inventory.getQuantity() - request.getQuantity());
+        inventory.setUpdatedBy(currentUser);
+        inventoryRepository.save(inventory);
+
         return modelMapper.map(saved, SalesResponse.class);
     }
 

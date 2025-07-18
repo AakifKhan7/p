@@ -19,6 +19,9 @@ const NavBar = () => {
         <Link to="/sales" className="hover:text-yellow-600">
           Sales
         </Link>
+        <Link to="/inventory" className="hover:text-yellow-600">
+          Inventory
+        </Link>
       </div>
       <button
         onClick={handleLogout}
