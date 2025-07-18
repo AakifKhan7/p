@@ -73,7 +73,7 @@ public class SalesService {
                 .map(s -> {
                     SalesResponse resp = modelMapper.map(s, SalesResponse.class);
                     // Map nested product details manually
-                    resp.setName(s.getProduct().getName());
+                    resp.setName(s.getProduct().getProductName());
                     resp.setCategory(s.getProduct().getCategory());
                     resp.setDescription(s.getProduct().getDescription());
                     resp.setImage(s.getProduct().getImage());
