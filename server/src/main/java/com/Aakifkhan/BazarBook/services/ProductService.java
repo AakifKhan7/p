@@ -13,7 +13,6 @@ import com.Aakifkhan.BazarBook.dto.Product.ProductSearchRequest;
 import com.Aakifkhan.BazarBook.dto.Product.ProductSearchResponse;
 import com.Aakifkhan.BazarBook.dto.Product.ProductCreateRequest;
 import com.Aakifkhan.BazarBook.repository.ProductRespository;
-import com.Aakifkhan.BazarBook.security.CurrentUserService;
 import org.modelmapper.ModelMapper;
 
 @Service

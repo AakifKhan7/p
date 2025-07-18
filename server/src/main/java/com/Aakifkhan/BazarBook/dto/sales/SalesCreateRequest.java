@@ -29,10 +29,4 @@ public class SalesCreateRequest {
 
     private String description;
 
-
-    // Optional image URL / path
-    private String image;
-
-    @NotNull
-    private Long shopId;
 }
