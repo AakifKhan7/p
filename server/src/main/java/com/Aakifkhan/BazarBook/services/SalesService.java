@@ -81,7 +81,8 @@ public class SalesService {
         SalesModel sale = new SalesModel();
         sale.setProduct(product);
         sale.setQuantity(request.getQuantity());
-        sale.setPrice(request.getPrice());
+        double unitPrice = inventory.getPrice();
+        sale.setPrice(unitPrice * request.getQuantity());
         sale.setShop(shop);
         sale.setCreatedBy(currentUser);
         sale.setUpdatedBy(currentUser);
@@ -96,9 +97,17 @@ public class SalesService {
         return modelMapper.map(saved, SalesResponse.class);
     }
 
-    public List<SalesResponse> listSales() {
+    public List<SalesResponse> listSales(java.time.LocalDate startDate, java.time.LocalDate endDate) {
         UserModel currentUser = currentUserService.getCurrentUser();
-        List<SalesModel> sales = salesRepository.findActiveSalesByUserId(currentUser.getId());
+        java.sql.Timestamp startTs = startDate != null ? java.sql.Timestamp.valueOf(startDate.atStartOfDay()) : null;
+        java.sql.Timestamp endTs = endDate != null ? java.sql.Timestamp.valueOf(endDate.plusDays(1).atStartOfDay().minusSeconds(1)) : null;
+
+        List<SalesModel> sales;
+        if (startTs == null && endTs == null) {
+            sales = salesRepository.findActiveSalesByUserId(currentUser.getId());
+        } else {
+            sales = salesRepository.findActiveSalesByUserIdAndDateRange(currentUser.getId(), startTs, endTs);
+        }
         List<SalesResponse> responses = new ArrayList<>();
         for (SalesModel s : sales) {
             SalesResponse resp = modelMapper.map(s, SalesResponse.class);

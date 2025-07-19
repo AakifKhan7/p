@@ -10,7 +10,6 @@ import { apiFetch } from "../utils/api";
 const emptyForm = {
   productName: "",
   quantity: "",
-  price: "",
   shopId: "",
 };
 
@@ -19,6 +18,8 @@ export default function SalesPage() {
   const [shops, setShops] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const loadShops = async () => {
     try {
@@ -35,7 +36,12 @@ export default function SalesPage() {
 
   const loadSales = async () => {
     try {
-      const res = await apiFetch("/api/sales/list");
+      let url = "/api/sales/list";
+      const params = [];
+      if (startDate) params.push(`startDate=${startDate}`);
+      if (endDate) params.push(`endDate=${endDate}`);
+      if (params.length) url += "?" + params.join("&");
+      const res = await apiFetch(url);
       setSales(res);
     } catch (e) {
       console.error(e);
@@ -67,6 +73,11 @@ export default function SalesPage() {
 
   const resetForm = () => setForm((f) => ({ ...emptyForm, shopId: f.shopId }));
 
+  const getShopName = (id) => {
+    const shop = shops.find((s) => s.id === id);
+    return shop ? shop.name : "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.shopId) {
@@ -75,12 +86,12 @@ export default function SalesPage() {
     }
     try {
       setLoading(true);
-      await apiFetch("/api/sales", {
+      await apiFetch("/api/sales/create", {
         method: "POST",
         body: JSON.stringify({
-          ...form,
+          productName: form.productName,
+          shopId: form.shopId,
           quantity: parseInt(form.quantity, 10),
-          price: parseFloat(form.price),
         }),
       });
       resetForm();
@@ -161,15 +172,6 @@ export default function SalesPage() {
             onChange={handleChange}
             min="1"
           />
-          <InputField
-            label="Price"
-            name="price"
-            value={form.price}
-            onChange={handleChange}
-            placeholder="0.00"
-            type="number"
-            min="0"
-          />
 
           <button
             type="submit"
@@ -185,6 +187,35 @@ export default function SalesPage() {
           <h2 className="flex items-center gap-2 font-semibold text-yellow-600 text-lg">
             <ShoppingCart size={20} /> Recent Sales
           </h2>
+
+          {/* Date Range Filter */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:border-yellow-500"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:border-yellow-500"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={loadSales}
+              className="self-end bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm"
+            >
+              Apply
+            </button>
+          </div>
 
           {sales.length === 0 ? (
             <p className="text-sm text-gray-500">No sales created yet.</p>
@@ -202,10 +233,10 @@ export default function SalesPage() {
                       className="w-full h-40 object-cover rounded-md"
                     />
                   )}
-                  <h3 className="font-medium text-gray-800">{sale.productName}</h3>
+                  <h3 className="font-medium text-gray-800">{sale.name}</h3>
                   <p className="text-sm text-gray-600">Quantity: {sale.quantity}</p>
                   <p className="text-sm text-gray-600">Price: ₹{sale.price}</p>
-                  <p className="text-sm text-gray-600">Shop: {sale.shop.name}</p>
+                  <p className="text-sm text-gray-600">Shop: {getShopName(sale.shopId)}</p>
 
                   <button
                     type="button"

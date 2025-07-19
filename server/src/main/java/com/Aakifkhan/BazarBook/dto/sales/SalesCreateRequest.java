@@ -20,13 +20,8 @@ public class SalesCreateRequest {
     @Positive(message = "Quantity must be positive")
     private Integer quantity;
     
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be positive")
-    private Double price;
 
-    @NotNull
-    private Long productId;
 
-    private String description;
+
 
 }

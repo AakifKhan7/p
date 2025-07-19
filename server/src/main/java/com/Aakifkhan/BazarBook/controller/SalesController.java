@@ -1,6 +1,7 @@
 package com.Aakifkhan.BazarBook.controller;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.Aakifkhan.BazarBook.dto.sales.SalesCreateRequest;
 import com.Aakifkhan.BazarBook.dto.sales.SalesResponse;
@@ -33,8 +36,10 @@ public class SalesController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<SalesResponse>> listSales() {
-        return ResponseEntity.ok(salesService.listSales());
+    public ResponseEntity<List<SalesResponse>> listSales(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(salesService.listSales(startDate, endDate));
     }
 
     @DeleteMapping("/{id}/delete")
