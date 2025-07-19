@@ -1,7 +1,7 @@
 package com.Aakifkhan.BazarBook.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,19 +98,19 @@ public class SalesService {
 
     public List<SalesResponse> listSales() {
         UserModel currentUser = currentUserService.getCurrentUser();
-        return salesRepository.findActiveSalesByUserId(currentUser.getId())
-                .stream()
-                .map(s -> {
-                    SalesResponse resp = modelMapper.map(s, SalesResponse.class);
-                    // Map nested product details manually
-                    resp.setName(s.getProduct().getProductName());
-                    resp.setCategory(s.getProduct().getCategory());
-                    resp.setDescription(s.getProduct().getDescription());
-                    resp.setImage(s.getProduct().getImage());
-                    resp.setShopId(s.getShop().getId());
-                    return resp;
-                })
-                .collect(Collectors.toList());
+        List<SalesModel> sales = salesRepository.findActiveSalesByUserId(currentUser.getId());
+        List<SalesResponse> responses = new ArrayList<>();
+        for (SalesModel s : sales) {
+            SalesResponse resp = modelMapper.map(s, SalesResponse.class);
+            // Map nested product details manually
+            resp.setName(s.getProduct().getProductName());
+            resp.setCategory(s.getProduct().getCategory());
+            resp.setDescription(s.getProduct().getDescription());
+            resp.setImage(s.getProduct().getImage());
+            resp.setShopId(s.getShop().getId());
+            responses.add(resp);
+        }
+        return responses;
     }
 
     @Transactional

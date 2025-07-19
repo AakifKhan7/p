@@ -1,7 +1,7 @@
 package com.Aakifkhan.BazarBook.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -82,10 +82,12 @@ public class ShopService {
 
     public List<ShopResponse> listShops() {
         UserModel currentUser = currentUserService.getCurrentUser();
-        return shopRepository.findByUser_IdAndIsDeletedFalse(currentUser.getId())
-                .stream()
-                .map(s -> modelMapper.map(s, ShopResponse.class))
-                .collect(Collectors.toList());
+        List<ShopModel> shops = shopRepository.findByUser_IdAndIsDeletedFalse(currentUser.getId());
+        List<ShopResponse> responses = new ArrayList<>();
+        for (ShopModel s : shops) {
+            responses.add(modelMapper.map(s, ShopResponse.class));
+        }
+        return responses;
     }
 
     public ShopResponse getShop(Long id) {

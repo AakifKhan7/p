@@ -16,7 +16,7 @@ import com.Aakifkhan.BazarBook.repository.ShopRepository;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 @Service
 public class InventoryService {
@@ -90,8 +90,10 @@ public class InventoryService {
         }
         
         List<InventoryModel> inventories = inventoryRepository.findByShopAndIsDeletedFalse(shop);
-        return inventories.stream()
-                .map(i -> modelMapper.map(i, InventoryResponse.class))
-                .collect(Collectors.toList());
+        List<InventoryResponse> responses = new ArrayList<>();
+        for (InventoryModel i : inventories) {
+            responses.add(modelMapper.map(i, InventoryResponse.class));
+        }
+        return responses;
     }
 }
