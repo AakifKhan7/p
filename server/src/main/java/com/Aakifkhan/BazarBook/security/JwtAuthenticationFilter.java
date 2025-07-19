@@ -31,18 +31,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String bearerToken = request.getHeader("Authorization");
         String token = null;
+        logger.debug("Processing request to: " + request.getRequestURI());
+        logger.debug("Authorization header: " + (bearerToken != null ? "Present" : "Missing"));
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             token = bearerToken.substring(7);
+            logger.debug("Extracted JWT token");
         }
 
         if (token != null && tokenProvider.validateToken(token)) {
             String email = tokenProvider.getEmailFromJWT(token);
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+            logger.debug("Valid token for email: " + email);
+            try {
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                logger.debug("Authentication set successfully");
+            } catch (org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
+                logger.debug("JWT authentication failed - user not found: " + ex.getMessage());
+            }
+        } else {
+            logger.debug("No valid token found, proceeding unauthenticated");
         }
 
         filterChain.doFilter(request, response);

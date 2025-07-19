@@ -16,5 +16,6 @@ public class SalesResponse {
     private java.sql.Timestamp createdAt;
     private double price;
     private String image;
-    private Long shopId;
+    private String shopName;
+    private double unitPrice;
 }

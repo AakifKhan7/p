@@ -25,3 +25,26 @@ export async function apiFetch(path, options = {}) {
   if (res.status === 204) return null;
   return res.json();
 }
+
+/**
+ * Same as apiFetch but returns response as Blob instead of JSON.
+ * Useful for downloading files (e.g., PDF reports).
+ */
+export async function apiFetchBlob(path, options = {}) {
+  const token = localStorage.getItem("token");
+  const headers = {
+    ...options.headers,
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Request failed with status ${res.status}`);
+  }
+  return res.blob();
+}

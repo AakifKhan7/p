@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import com.Aakifkhan.BazarBook.model.Inventory.ProductModel;
 import com.Aakifkhan.BazarBook.model.User.UserModel;
@@ -32,9 +32,11 @@ public class ProductService {
      */
     public List<ProductSearchResponse> searchProducts(ProductSearchRequest request) {
         List<ProductModel> products = productRepository.findByProductNameIgnoreCaseContainingAndIsDeletedFalse(request.getProductName());
-        return products.stream()
-                .map(product -> modelMapper.map(product, ProductSearchResponse.class))
-                .collect(Collectors.toList());
+        List<ProductSearchResponse> responses = new ArrayList<>();
+        for (ProductModel product : products) {
+            responses.add(modelMapper.map(product, ProductSearchResponse.class));
+        }
+        return responses;
     }
     
     /**

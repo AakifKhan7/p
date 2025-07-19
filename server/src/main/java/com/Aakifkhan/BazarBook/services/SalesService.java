@@ -1,7 +1,7 @@
 package com.Aakifkhan.BazarBook.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,8 @@ public class SalesService {
         SalesModel sale = new SalesModel();
         sale.setProduct(product);
         sale.setQuantity(request.getQuantity());
-        sale.setPrice(request.getPrice());
+        double unitPrice = inventory.getPrice();
+        sale.setPrice(unitPrice * request.getQuantity());
         sale.setShop(shop);
         sale.setCreatedBy(currentUser);
         sale.setUpdatedBy(currentUser);
@@ -96,21 +97,31 @@ public class SalesService {
         return modelMapper.map(saved, SalesResponse.class);
     }
 
-    public List<SalesResponse> listSales() {
+    public List<SalesResponse> listSales(java.time.LocalDate startDate, java.time.LocalDate endDate) {
         UserModel currentUser = currentUserService.getCurrentUser();
-        return salesRepository.findActiveSalesByUserId(currentUser.getId())
-                .stream()
-                .map(s -> {
-                    SalesResponse resp = modelMapper.map(s, SalesResponse.class);
-                    // Map nested product details manually
-                    resp.setName(s.getProduct().getProductName());
-                    resp.setCategory(s.getProduct().getCategory());
-                    resp.setDescription(s.getProduct().getDescription());
-                    resp.setImage(s.getProduct().getImage());
-                    resp.setShopId(s.getShop().getId());
-                    return resp;
-                })
-                .collect(Collectors.toList());
+        java.sql.Timestamp startTs = startDate != null ? java.sql.Timestamp.valueOf(startDate.atStartOfDay()) : null;
+        java.sql.Timestamp endTs = endDate != null ? java.sql.Timestamp.valueOf(endDate.plusDays(1).atStartOfDay().minusSeconds(1)) : null;
+
+        List<SalesModel> sales;
+        if (startTs == null && endTs == null) {
+            sales = salesRepository.findActiveSalesByUserId(currentUser.getId());
+        } else {
+            sales = salesRepository.findActiveSalesByUserIdAndDateRange(currentUser.getId(), startTs, endTs);
+        }
+        List<SalesResponse> responses = new ArrayList<>();
+        for (SalesModel s : sales) {
+            SalesResponse resp = modelMapper.map(s, SalesResponse.class);
+            // Map nested product details manually
+            resp.setName(s.getProduct().getProductName());
+            resp.setCategory(s.getProduct().getCategory());
+            resp.setDescription(s.getProduct().getDescription());
+            resp.setImage(s.getProduct().getImage());
+            resp.setShopName(s.getShop().getShopName());
+            // Calculate unit price from total price and quantity
+            resp.setUnitPrice(s.getPrice() / s.getQuantity());
+            responses.add(resp);
+        }
+        return responses;
     }
 
     @Transactional
