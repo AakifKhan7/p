@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; margin: 30px; line-height: 1.4; }
+        .meta { text-align: center; font-size: 13px; margin-bottom: 25px; color: #666; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; font-size: 11px; text-align: left; }
+        th { background: #f8f9fa; font-weight: bold; color: #333; }
+        tr:nth-child(even) { background: #fafafa; }
+        tr:hover { background: #f5f5f5; }
+        .total { font-weight: bold; background: #e9ecef !important; }
+        .number { text-align: right; }
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="color: #2563eb; margin-bottom: 5px;">BazarBook</h1>
+        <h2 style="margin-top: 0; color: #64748b;">Sales Report</h2>
+        <h3 style="margin-top: 0; color: #64748b;" th:text="${shopName}"></h3>
+    </div>
+    <div class="meta">
+        Period: <span th:text="${range}"></span><br/>
+        Generated: <span th:text="${generated}"></span>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>#</th><th>Product</th><th>Category</th><th>Qty</th>
+            <th>Unit Price</th><th>Total</th><th>Date</th><th>Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s, iter : ${sales}">
+            <td class="center" th:text="${iter.count}"></td>
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.category}"></td>
+            <td class="center" th:text="${s.quantity}"></td>
+            <td class="number" th:text="'₹' + ${#numbers.formatDecimal(s.unitPrice,1,2)}"></td>
+            <td class="number" th:text="'₹' + ${#numbers.formatDecimal(s.price,1,2)}"></td>
+            <td class="center" th:text="${#dates.format(s.createdAt,'dd-MMM-yyyy')}"></td>
+            <td class="center" th:text="${#dates.format(s.createdAt,'h:mm a')}"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="total">Grand Total</td>
+            <td th:text="'₹' + ${grandTotal}" class="total number"></td>
+            <td colspan="2"></td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <footer>
+        <hr/>
+        <div style="text-align:center;">© BazarBook</div>
+    </footer>
+</body>
+</html>

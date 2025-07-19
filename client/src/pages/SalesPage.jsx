@@ -2,10 +2,10 @@ import { useEffect, useState, useRef } from "react";
 
 // Guard to avoid duplicate initial fetch in React StrictMode dev re-mount
 let initialSalesLoaded = false;
-import { PlusCircle, Trash2, ShoppingCart } from "lucide-react";
+import { PlusCircle, Trash2, ShoppingCart, Download } from "lucide-react";
 import InputField from "../components/InputField";
 import NavBar from "../components/NavBar";
-import { apiFetch } from "../utils/api";
+import { apiFetch, apiFetchBlob } from "../utils/api";
 
 const emptyForm = {
   productName: "",
@@ -20,6 +20,7 @@ export default function SalesPage() {
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [downloading, setDownloading] = useState(false);
 
   const loadShops = async () => {
     try {
@@ -72,6 +73,33 @@ export default function SalesPage() {
   };
 
   const resetForm = () => setForm((f) => ({ ...emptyForm, shopId: f.shopId }));
+
+  const handleDownloadPdf = async () => {
+    try {
+      setDownloading(true);
+      let url = "/api/sales/report/pdf";
+      const params = [];
+      if (startDate) params.push(`startDate=${startDate}`);
+      if (endDate) params.push(`endDate=${endDate}`);
+      if (params.length) url += "?" + params.join("&");
+      const blob = await apiFetchBlob(url, {
+        headers: { Accept: "application/pdf" },
+      });
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = "sales_report.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to download PDF");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const getShopName = (id) => {
     const shop = shops.find((s) => s.id === id);
@@ -214,6 +242,14 @@ export default function SalesPage() {
               className="self-end bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Apply
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={downloading}
+              className="self-end bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm flex items-center gap-1"
+            >
+              <Download size={14} /> {downloading ? "Downloading..." : "Download PDF"}
             </button>
           </div>
 

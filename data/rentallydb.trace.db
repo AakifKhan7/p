@@ -3220,3 +3220,9 @@ alter table add column product_id [42001-232]
 2025-07-18 23:00:03.194572+05:30 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table sales add column product_id[*]"; expected "data type"; SQL statement:
 alter table sales add column product_id [42001-232]
+2025-07-19 21:16:55.618039+05:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * [*]form slaes"; SQL statement:
+select * form slaes [42000-232]
+2025-07-19 21:17:02.447539+05:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * [*]form sales"; SQL statement:
+select * form sales [42000-232]

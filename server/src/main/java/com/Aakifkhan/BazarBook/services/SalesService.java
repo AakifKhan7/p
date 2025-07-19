@@ -116,7 +116,9 @@ public class SalesService {
             resp.setCategory(s.getProduct().getCategory());
             resp.setDescription(s.getProduct().getDescription());
             resp.setImage(s.getProduct().getImage());
-            resp.setShopId(s.getShop().getId());
+            resp.setShopName(s.getShop().getShopName());
+            // Calculate unit price from total price and quantity
+            resp.setUnitPrice(s.getPrice() / s.getQuantity());
             responses.add(resp);
         }
         return responses;

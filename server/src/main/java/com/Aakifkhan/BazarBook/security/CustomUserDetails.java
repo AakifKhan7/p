@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.Aakifkhan.BazarBook.model.User.UserAuthModel;
@@ -20,7 +20,8 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO: map real roles when implemented
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        // No role checks for now
+        return Collections.emptyList();
     }
 
     @Override
